@@ -24,7 +24,7 @@ end
 
 def show_cards hand
   if hand.downcase == 'player'
-    puts "#{$player_name}'s hand: #{$player_hand.map {|card| card[1..2]}.to_s.force_encoding("UTF-8")}, #{calculate_points $player_hand} points."
+    puts "#{$player_name}'s hand: #{$player_hand.map {|card| card[1..2]}}, #{calculate_points $player_hand} points."
   else
     puts "Dealer's hand: #{$dealer_hand.map {|card| card[1..2]}}, #{calculate_points $dealer_hand} points."
   end
