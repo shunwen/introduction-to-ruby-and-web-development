@@ -1,9 +1,9 @@
 # encoding: UTF-8
+require 'pry'
 
 POINTS = {'ACE' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10}
-SUITS = ['Club', 'Diamond', 'Heart', 'Spade'] #["♣", "♦", "♥", "♠"]
+SUITS = ['C', 'D', 'H', 'S'] #["♣", "♦", "♥", "♠"]
 
-player_name = ""
 $player_hand = []
 $dealer_hand = []
 $dealer_shoe = []
@@ -17,10 +17,10 @@ def get_player_name name='Professor X'
 end
 
 def calculate_points cards
-  points = cards.map { |card| card.last }
-  total = points.inject(0) { |sum, point| sum + POINTS[point] }
-  points.count('ACE').times { total > 11 ? break : total += 10 }
-  total
+  cards = cards.map { |c| c.last }
+  points = cards.inject(0) { |sum, card| sum + POINTS[card] }
+  cards.count('ACE').times { points > 11 ? break : points += 10 }
+  points
 end
 
 def show_cards cards, name='Dealer'
