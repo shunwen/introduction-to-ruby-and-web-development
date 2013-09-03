@@ -27,19 +27,17 @@ def show_cards cards, name='Dealer'
   puts "#{name}'s hand: #{cards.map {|card| card[1..2]}}, #{calculate_points cards} points."
 end
 
-def init_dealer_shoe
+def get_dealer_shoe
   puts "How many decks of cards in this game? "
   num_of_decks = gets.chomp.to_i
   num_of_decks = 1 if num_of_decks.zero?
 
   # A card is [deck, suit, point]
-  $dealer_shoe = (1..num_of_decks).to_a.product SUITS, POINTS.keys
-  $dealer_shoe.shuffle!
+  (1..num_of_decks).to_a.product(SUITS, POINTS.keys).shuffle!
 end
 
-def init_hands
-  $player_hand.clear
-  $dealer_hand.clear
+def init_hands hands=[]
+  hands.each {|h| h.clear}
 end
 
 def deal_card hand='dealer'
@@ -128,8 +126,8 @@ end
 player_name = get_player_name
 
 loop do
-  init_dealer_shoe
-  init_hands
+  $dealer_shoe = get_dealer_shoe
+  init_hands [$player_hand, $dealer_hand]
   2.times { deal_card 'player' }
   2.times { deal_card }
 
