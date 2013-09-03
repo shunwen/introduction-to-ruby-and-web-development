@@ -76,7 +76,7 @@ end
 def judge_dealer dealer_points, player_points
   if dealer_points > 21
     player_result = 'won'
-  elsif dealer_points == 21 or dealer_points >= player_points
+  elsif dealer_points == 21 or dealer_points > player_points
     player_result = 'lost'
   else
     player_result = 'none'
