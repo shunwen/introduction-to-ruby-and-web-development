@@ -102,17 +102,17 @@ def act_dealer hand, dealer_shoe, player_points
 end
 
 def player_won msg='win'
-  puts "You win! #{msg.uppercase}"
+  puts "You win! #{msg.upcase}"
 end
 
 def player_lost msg='lose'
-  puts "You lose! #{msg.uppercase}"
+  puts "You lose! #{msg.upcase}"
 end
 
 def new_game? name
   action = nil
   until ['', 'y', 'n'].include? action
-    print "#{name}, play again? [Yn]"
+    print "#{name}, play again? [Yn] "
     action = gets.chomp.downcase
   end
 
