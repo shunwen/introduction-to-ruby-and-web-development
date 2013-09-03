@@ -21,7 +21,7 @@ end
 def show_cards cards, name='Dealer'
   print "#{name}'s hand: "
   cards.each {|c| print c[1]; print " #{c[2]}, " }
-  puts "#{calculate_points cards} points."
+  puts "=> #{calculate_points cards} points."
 end
 
 def get_dealer_shoe
