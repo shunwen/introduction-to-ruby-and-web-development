@@ -92,7 +92,7 @@ def act_dealer hand, dealer_shoe, player_points
   dealer_points = calculate_points hand
   player_result = judge_dealer dealer_points, player_points
 
-  while dealer_points < 17 or dealer_points < player_points or player_result == 'none'
+  while dealer_points < 17 or player_result == 'none'
     deal_card hand, dealer_shoe
     show_cards hand
     dealer_points = calculate_points hand
