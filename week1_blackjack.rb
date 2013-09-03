@@ -3,16 +3,17 @@
 POINTS = {'ACE' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10}
 SUITS = ['Club', 'Diamond', 'Heart', 'Spade'] #["♣", "♦", "♥", "♠"]
 
-$player_name = "Professor X"
+player_name = ""
 $player_hand = []
 $dealer_hand = []
 $dealer_shoe = []
 
-def get_player_name
-  puts "Are you #{$player_name} ? If not, please enter your name: "
-  name = gets.chomp.capitalize
-  $player_name = name unless name.empty?
-  puts "Hello, #{$player_name}."
+def get_player_name name='Professor X'
+  puts "Are you #{name} ? If not, please enter your name: "
+  input = gets.chomp.capitalize
+  name = input unless input.empty?
+  puts "Hello, #{name}."
+  name
 end
 
 def calculate_points cards
@@ -22,12 +23,8 @@ def calculate_points cards
   total
 end
 
-def show_cards hand
-  if hand.downcase == 'player'
-    puts "#{$player_name}'s hand: #{$player_hand.map {|card| card[1..2]}}, #{calculate_points $player_hand} points."
-  else
-    puts "Dealer's hand: #{$dealer_hand.map {|card| card[1..2]}}, #{calculate_points $dealer_hand} points."
-  end
+def show_cards cards, name='Dealer'
+  puts "#{name}'s hand: #{cards.map {|card| card[1..2]}}, #{calculate_points cards} points."
 end
 
 def init_dealer_shoe
@@ -45,8 +42,8 @@ def init_hands
   $dealer_hand.clear
 end
 
-def deal_card hand
-  hand.downcase == 'player' ? $player_hand << $dealer_shoe.pop : $dealer_hand << $dealer_shoe.pop
+def deal_card hand='dealer'
+  hand == 'player' ? $player_hand << $dealer_shoe.pop : $dealer_hand << $dealer_shoe.pop
 end
 
 def judge_player points
@@ -57,10 +54,10 @@ def judge_player points
   end
 end
 
-def act_player
+def act_player name
   action = nil
   status = judge_player calculate_points $player_hand
-  show_cards 'player'
+  show_cards $player_hand, name
 
   while status == 'none'
     until ['hit', 'stay'].include? action
@@ -72,7 +69,7 @@ def act_player
       break
     else
       deal_card 'player'
-      show_cards 'player'
+      show_cards $player_hand, name
       status = judge_player calculate_points $player_hand
       action = nil
     end
@@ -97,11 +94,11 @@ def act_dealer
   player_points = calculate_points $player_hand
   dealer_points = calculate_points $dealer_hand
   player_result = judge_dealer dealer_points, player_points
-  show_cards 'dealer'
+  show_cards $dealer_hand
 
   while dealer_points < 17 or dealer_points < player_points or player_result == 'none'
-    deal_card 'dealer'
-    show_cards 'dealer'
+    deal_card
+    show_cards $dealer_hand
     dealer_points = calculate_points $dealer_hand
     player_result = judge_dealer dealer_points, player_points
   end
@@ -117,10 +114,10 @@ def player_lost msg = ""
   puts "You lose! #{msg.capitalize}"
 end
 
-def new_game?
+def new_game? name
   action = nil
   until ['', 'y', 'n'].include? action
-    print "#{$player_name}, play again? [Yn]"
+    print "#{name}, play again? [Yn]"
     action = gets.chomp.downcase
   end
 
@@ -128,15 +125,15 @@ def new_game?
 end
 # -- Blackjack
 
-get_player_name
+player_name = get_player_name
 
 loop do
   init_dealer_shoe
   init_hands
   2.times { deal_card 'player' }
-  2.times { deal_card 'dealer' }
+  2.times { deal_card }
 
-  result = act_player
+  result = act_player player_name
   result = act_dealer if result == "dealer's turn"
 
   case result
@@ -145,7 +142,7 @@ loop do
   when 'lost' then player_lost result
   end
 
-  break unless new_game?
+  break unless new_game? player_name
 end
 
 puts "Goodbye!"
