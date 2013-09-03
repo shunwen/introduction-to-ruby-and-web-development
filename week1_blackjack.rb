@@ -5,7 +5,6 @@ POINTS = {'ACE' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7
 SUITS = ['C', 'D', 'H', 'S'] #["♣", "♦", "♥", "♠"]
 
 $player_hand = []
-$dealer_hand = []
 $dealer_shoe = []
 
 def get_player_name name='Professor X'
@@ -40,8 +39,9 @@ def init_hands hands=[]
   hands.each {|h| h.clear}
 end
 
-def deal_card hand='dealer'
-  hand == 'player' ? $player_hand << $dealer_shoe.pop : $dealer_hand << $dealer_shoe.pop
+def deal_card hand, dealer_shoe
+  hand << dealer_shoe.pop
+  # puts "Cards left: #{dealer_shoe.length}"
 end
 
 def judge_player points
@@ -53,9 +53,10 @@ def judge_player points
 end
 
 def act_player name
+  show_cards $player_hand, name
+
   action = nil
   status = judge_player calculate_points $player_hand
-  show_cards $player_hand, name
 
   while status == 'none'
     until ['hit', 'stay'].include? action
@@ -66,7 +67,7 @@ def act_player name
     if action == 'stay'
       break
     else
-      deal_card 'player'
+      deal_card $player_hand, $dealer_shoe
       show_cards $player_hand, name
       status = judge_player calculate_points $player_hand
       action = nil
@@ -88,27 +89,28 @@ def judge_dealer dealer_points, player_points
   player_result
 end
 
-def act_dealer
+def act_dealer hand
+  show_cards hand
+
   player_points = calculate_points $player_hand
-  dealer_points = calculate_points $dealer_hand
+  dealer_points = calculate_points hand
   player_result = judge_dealer dealer_points, player_points
-  show_cards $dealer_hand
 
   while dealer_points < 17 or dealer_points < player_points or player_result == 'none'
-    deal_card
-    show_cards $dealer_hand
-    dealer_points = calculate_points $dealer_hand
+    deal_card hand, $dealer_shoe
+    show_cards hand
+    dealer_points = calculate_points hand
     player_result = judge_dealer dealer_points, player_points
   end
 
   player_result
 end
 
-def player_won msg = ""
+def player_won msg=""
   puts "You win! #{msg.capitalize}"
 end
 
-def player_lost msg = ""
+def player_lost msg=""
   puts "You lose! #{msg.capitalize}"
 end
 
@@ -124,15 +126,16 @@ end
 # -- Blackjack
 
 player_name = get_player_name
+dealer_hand = []
 
 loop do
   $dealer_shoe = get_dealer_shoe
-  init_hands [$player_hand, $dealer_hand]
-  2.times { deal_card 'player' }
-  2.times { deal_card }
+  init_hands [$player_hand, dealer_hand]
+  2.times { deal_card $player_hand, $dealer_shoe }
+  2.times { deal_card dealer_hand, $dealer_shoe }
 
   result = act_player player_name
-  result = act_dealer if result == "dealer's turn"
+  result = act_dealer dealer_hand if result == "dealer's turn"
 
   case result
   when 'won' then player_won
