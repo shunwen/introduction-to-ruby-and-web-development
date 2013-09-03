@@ -5,7 +5,7 @@ POINTS = {'ACE' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7
 SUITS = ['C', 'D', 'H', 'S'] #["♣", "♦", "♥", "♠"]
 
 def get_player_name name='Professor X'
-  puts "Are you #{name} ? If not, please enter your name: "
+  print "Are you #{name} ? If not, please enter your name: "
   input = gets.chomp.capitalize
   name = input unless input.empty?
   puts "Hello, #{name}."
@@ -24,7 +24,7 @@ def show_cards cards, name='Dealer'
 end
 
 def get_dealer_shoe
-  puts "How many decks of cards in this game? "
+  print "How many decks of cards in this game? "
   num_of_decks = gets.chomp.to_i
   num_of_decks = 1 if num_of_decks.zero?
 
@@ -101,12 +101,12 @@ def act_dealer hand, dealer_shoe, player_points
   player_result
 end
 
-def player_won msg=""
-  puts "You win! #{msg.capitalize}"
+def player_won msg='win'
+  puts "You win! #{msg.uppercase}"
 end
 
-def player_lost msg=""
-  puts "You lose! #{msg.capitalize}"
+def player_lost msg='lose'
+  puts "You lose! #{msg.uppercase}"
 end
 
 def new_game? name
