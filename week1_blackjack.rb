@@ -1,8 +1,7 @@
-# encoding: UTF-8
 require 'pry'
 
 POINTS = {'ACE' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10}
-SUITS = ['C', 'D', 'H', 'S'] #["♣", "♦", "♥", "♠"]
+SUITS = ["\u2663", "\u2666", "\u2665", "\u2660"]
 
 def get_player_name name='Professor X'
   print "Are you #{name} ? If not, please enter your name: "
@@ -20,7 +19,9 @@ def calculate_points cards
 end
 
 def show_cards cards, name='Dealer'
-  puts "#{name}'s hand: #{cards.map {|card| card[1..2]}}, #{calculate_points cards} points."
+  print "#{name}'s hand: "
+  cards.each {|c| print c[1]; print " #{c[2]}, " }
+  puts "#{calculate_points cards} points."
 end
 
 def get_dealer_shoe
