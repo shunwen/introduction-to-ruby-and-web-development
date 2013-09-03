@@ -20,12 +20,12 @@ end
 
 def show_cards cards, name='Dealer'
   print "#{name}'s hand: "
-  cards.each {|c| print c[1]; print " #{c[2]}, " }
+  cards.each { |c| print c[1]; print " #{c[2]}, " }
   puts "=> #{calculate_points cards} points."
 end
 
 def get_dealer_shoe
-  print "How many decks of cards in this game? "
+  print "How many decks of cards in this game? [1] "
   num_of_decks = gets.chomp.to_i
   num_of_decks = 1 if num_of_decks.zero?
 
@@ -39,7 +39,6 @@ end
 
 def deal_card hand, dealer_shoe
   hand << dealer_shoe.pop
-  # puts "Cards left: #{dealer_shoe.length}"
 end
 
 def judge_player points
@@ -53,9 +52,9 @@ end
 def act_player name, hand, dealer_shoe
   show_cards hand, name
 
-  status = judge_player calculate_points hand
+  result = judge_player calculate_points hand
 
-  while status == 'none'
+  while result == 'none'
     action = nil
     until ['hit', 'stay'].include? action
       print "Hit or stay? "
@@ -67,11 +66,11 @@ def act_player name, hand, dealer_shoe
     else
       deal_card hand, dealer_shoe
       show_cards hand, name
-      status = judge_player calculate_points hand
+      result = judge_player calculate_points hand
     end
   end
 
-  status == 'none' ? "dealer's turn" : status
+  result
 end
 
 def judge_dealer dealer_points, player_points
@@ -133,7 +132,7 @@ loop do
   2.times { deal_card dealer_hand, dealer_shoe }
 
   result = act_player player_name, player_hand, dealer_shoe
-  result = act_dealer dealer_hand, dealer_shoe, calculate_points(player_hand) if result == "dealer's turn"
+  result = act_dealer dealer_hand, dealer_shoe, calculate_points(player_hand) if result == 'none'
 
   case result
   when 'won' then player_won
