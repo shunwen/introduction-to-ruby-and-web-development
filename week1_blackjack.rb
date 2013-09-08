@@ -20,7 +20,7 @@ end
 
 def show_cards cards, name='Dealer'
   print "#{name}'s hand: "
-  cards.each { |c| print c[1]; print " #{c[2]}, " }
+  cards.each { |c| print c[1], " #{c[2]}, " }
   puts "=> #{calculate_points cards} points."
 end
 
@@ -50,8 +50,6 @@ def judge_player points
 end
 
 def act_player name, hand, dealer_shoe
-  show_cards hand, name
-
   result = judge_player calculate_points hand
 
   while result == 'none'
@@ -86,8 +84,6 @@ def judge_dealer dealer_points, player_points
 end
 
 def act_dealer hand, dealer_shoe, player_points
-  show_cards hand
-
   dealer_points = calculate_points hand
   player_result = judge_dealer dealer_points, player_points
 
@@ -130,6 +126,8 @@ loop do
   init_hands [player_hand, dealer_hand]
   2.times { deal_card player_hand, dealer_shoe }
   2.times { deal_card dealer_hand, dealer_shoe }
+  show_cards dealer_hand
+  show_cards player_hand, player_name
 
   result = act_player player_name, player_hand, dealer_shoe
   result = act_dealer dealer_hand, dealer_shoe, calculate_points(player_hand) if result == 'none'
