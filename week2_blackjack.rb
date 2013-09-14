@@ -57,6 +57,7 @@ class Blackjack
   private :final_judge
 
   def player_turn player
+    puts "", "#{player.name}'s turn: "
     show player
     judge player
 
@@ -72,6 +73,7 @@ class Blackjack
   private :player_turn
 
   def dealer_turn
+    puts "", "#{dealer.name}'s turn: "
     show dealer
     judge dealer
 
@@ -148,7 +150,7 @@ class Card
 
   attr_reader :value, :suit, :deck
 
-  def initialize suit, value, deck=nil
+  def initialize suit, value, deck = nil
     @value = value
     @suit = suit
     @deck = deck
@@ -176,7 +178,7 @@ class Player
   end
 
   def show_cards
-    hand = cards.map {|c| c.show}.join(', ')
+    hand = cards.map {|c| c.show}.join ', '
     "#{name} has #{hand}"
   end
 
@@ -197,7 +199,7 @@ num_of_decks = 1 if num_of_decks <= 0
 
 players = []
 num_of_players.times.map do |i|
-  player = Player.new("Player-#{i}")
+  player = Player.new "Player-#{i}"
   player.get_name
   players << player
 end
